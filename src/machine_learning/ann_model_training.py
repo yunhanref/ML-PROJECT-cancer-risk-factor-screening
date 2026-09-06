@@ -9,11 +9,9 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 
-# 0. Tekrarlanabilirlik (Reproducibility) İçin Rastgelelik Sabitleme
 np.random.seed(42)
 tf.random.set_seed(42)
 
-# 1. Hazır Veri Setlerini Yükleme
 print("Veri setleri yükleniyor...")
 X_train = pd.read_csv('X_train_hazir.csv')
 X_test = pd.read_csv('X_test_hazir.csv')
@@ -23,12 +21,10 @@ y_test = pd.read_csv('y_test_hazir.csv')
 y_train = y_train.squeeze()
 y_test = y_test.squeeze()
 
-# 2. Ölçeklendirme
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# --- DÜZELTME: Sınıf Ağırlıklarını Hesaplama ---
 print("Dengesiz sınıflar için 'balanced' ağırlıklar hesaplanıyor...")
 sinif_agirliklari = class_weight.compute_class_weight(
     class_weight='balanced',
@@ -37,7 +33,6 @@ sinif_agirliklari = class_weight.compute_class_weight(
 )
 sinif_agirliklari_dict = dict(enumerate(sinif_agirliklari))
 
-# 3. ANN Modelini İnşa Etme
 print("Model inşa ediliyor...")
 model = Sequential()
 model.add(Dense(64, activation='relu', input_shape=(X_train_scaled.shape[1],)))
@@ -48,7 +43,6 @@ model.add(Dense(1, activation='sigmoid'))
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-# 4. Modeli Eğitme (Ağırlıklar ile)
 print("Model eğitimi başlıyor...")
 early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 
@@ -60,11 +54,9 @@ history = model.fit(X_train_scaled, y_train,
                     callbacks=[early_stop],
                     verbose=1)
 
-# 5. Tahminler ve Değerlendirme
 y_pred_probs = model.predict(X_test_scaled)
 y_pred_classes = (y_pred_probs > 0.5).astype(int)
 
-# --- ÇIKTILARIN ÜRETİLMESİ ---
 plt.figure(figsize=(8,6))
 cm = confusion_matrix(y_test, y_pred_classes)
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
