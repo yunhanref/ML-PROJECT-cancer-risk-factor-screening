@@ -11,7 +11,6 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_curve, 
 def main():
     print("Bayesian Approach (Naive Bayes) Model Training starting...")
     
-    # 1. Load the preprocessed datasets
     X_train = pd.read_csv('X_train_hazir.csv')
     X_test  = pd.read_csv('X_test_hazir.csv')
     y_train = pd.read_csv('y_train_hazir.csv').squeeze().astype(int)
@@ -92,7 +91,6 @@ def main():
     plt.close()
     print(f"Saved Confusion Matrix plot: {cm_plot_path}")
     
-    # Plot 2: ROC Curve
     fpr, tpr, _ = roc_curve(y_test, y_prob)
     plt.figure(figsize=(7, 6))
     plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC eğrisi (Eğri Altı Alan = {test_auc:.3f})')
