@@ -126,7 +126,7 @@ cancer-screening-ml-project/
 2. **Add the Dataset:**
   Due to file size limitations, the dataset is not available on GitHub. Download the X_train, X_test, y_train, and y_test files from the link inside data/drive.txt and place them into the data/ folder.
   
-3. **Modelleri Çalıştırın:**
+3. **Run the Models:**
   Use files inside /src to train the models:
   ```
   python src/logistic_regression.py
